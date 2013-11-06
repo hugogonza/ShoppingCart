@@ -7,32 +7,33 @@
 package jpa;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 
 /**
  *
  * @author HugoCésar
  */
 @Entity
-public class Merchandise implements Serializable {
+public class Item implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
-    private String name;
+    private String description;
 
-    @OneToMany
-    private Collection<Item> items = new ArrayList<>();
+    public Item( String description) {
+        this.description = description;
+    }
+
+    public Item() {
+        
+    }
     
     
-    
+
     public Long getId() {
         return id;
     }
@@ -51,10 +52,10 @@ public class Merchandise implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Merchandise)) {
+        if (!(object instanceof Item)) {
             return false;
         }
-        Merchandise other = (Merchandise) object;
+        Item other = (Item) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -63,28 +64,7 @@ public class Merchandise implements Serializable {
 
     @Override
     public String toString() {
-        return "jpa.Merchandise[ id=" + id + " ]";
+        return "jpa.Item[ id=" + id + " ]";
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Collection<Item> getItems() {
-        return items;
-    }
-
-    public void setItems(Collection<Item> items) {
-        this.items = items;
-    }
-    public void addItem(Item item){
-    items.add(item);
-            }
-    
-    
     
 }

@@ -11,6 +11,7 @@ import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import jpa.Item;
 import jpa.Merchandise;
 
 /**
@@ -30,6 +31,15 @@ public class CartBean {
         Merchandise m = new Merchandise();
         m.setName(merchandise);
         em.persist(m);
+        
+        Item i1= new Item("accesories");
+        em.persist(i1);
+        
+        Item i2= new Item("accesories 2");
+        em.persist(i2);
+        
+        
+        
 
     }
 
