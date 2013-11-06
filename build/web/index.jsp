@@ -14,31 +14,39 @@
     </head>
     <body>
         <h1>Shopping cart</h1>
-        
+
         <a href="controller?action=list">Display the contents</a>
         <br/>
-        
+
         <form action="controller" method="POST">
             <input type="hidden" name="action" value="add"/>
             Merchandise: <input type="text" name="merchandise"/>
             <br/>
             <input type="submit" value="add"/>
         </form>
-        
+
         <form action="controller" method="POST">
             <input type="hidden" name="action" value="delete"/>
             Merchandise: <input type="text" name="merchandise"/>
             <br/>
             <input type="submit" value="delete"/>
         </form>
-        
-                    <h1>Cart</h1>
-            <ul>
-                <c:forEach items="${contents}" var="c">
-                    
-                <li>${c}</li>    
+
+        <form action="controller" method="POST">
+            <input type="hidden" name="action" value="update"/>
+            Id: <input type="text" name="idp"/><br/>
+            Merchandise: <input type="text" name="merchandise"/>
+            <br/>
+            <input type="submit" value="update"/>
+        </form>
+
+        <h1>Cart</h1>
+        <ul>
+            <c:forEach items="${contents}" var="m">
+
+                <li>${m.id} ${m.name}</li>    
                 </c:forEach>
-                
-            </ul>
+
+        </ul>
     </body>
 </html>

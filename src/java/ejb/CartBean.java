@@ -3,12 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ejb;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateful;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import jpa.Merchandise;
 
 /**
  *
@@ -17,19 +20,44 @@ import javax.ejb.Stateful;
 @Stateful
 public class CartBean {
 
+    @PersistenceContext(unitName = "ShoppingCartPU")
+    private EntityManager em;
+
     List<String> contents = new ArrayList<>();
-    
-    public void add(String merchandise){
-        contents.add(merchandise);
+
+    public void add(String merchandise) {
+
+        Merchandise m = new Merchandise();
+        m.setName(merchandise);
+        em.persist(m);
+
+    }
+
+    public void delete(Long id) {
+        Merchandise m = em.find(Merchandise.class, id);
+        em.remove(m);
+    }
+
+    public List<Merchandise> getContents() {
+        TypedQuery<Merchandise> q = em.createQuery("select m from Merchandise m", Merchandise.class);
+        return q.getResultList();
+    }
+
+    public void persist(Object object) {
+        em.persist(object);
+    }
+
+    public void update(Long id, String merchandise) {
+//MEthod One to update
+//                Merchandise m = em.find(Merchandise.class,id);
+//                m.setName(merchandise);
+//                
         
-    }
-    
-    public void delete(String merchandise){
-        contents.remove(merchandise);
-    }
-    
-    public List<String> getContents(){
-    
-    return contents;
+        //Method 3 to update
+        Merchandise m = new Merchandise();
+        m.setId(id);
+        m.setName(merchandise);
+        em.merge(m);
+
     }
 }

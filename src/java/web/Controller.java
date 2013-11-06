@@ -9,6 +9,7 @@ import ejb.CartBean;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import jpa.Merchandise;
 
 /**
  *
@@ -24,18 +26,19 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "Controller", urlPatterns = {"/controller"})
 public class Controller extends HttpServlet {
 
+    @EJB
+    CartBean cart;
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-        HttpSession session = request.getSession();
-        CartBean cart = (CartBean) session.getAttribute("cart");
+
         if (cart == null) {
             cart = new CartBean();
-            session.setAttribute("cart", cart);
         }
         if ("list".equals(action)) {
-            List<String> contents = cart.getContents();
+            List<Merchandise> contents = cart.getContents();
             request.setAttribute("contents", contents);
         }
 
@@ -48,17 +51,22 @@ public class Controller extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getParameter("action");
         String merchandise = request.getParameter("merchandise");
-        HttpSession session = request.getSession();
-        CartBean cart = (CartBean) session.getAttribute("cart");
+        String idp = request.getParameter("id");
+
         if (cart == null) {
             cart = new CartBean();
-            session.setAttribute("cart", cart);
         }
         if ("add".equals(action)) {
             cart.add(merchandise);
         } else if ("delete".equals(action)) {
-            cart.delete(merchandise);
+            cart.delete(Long.parseLong(merchandise));
         }
+        else if ("update".equals(action)) {
+            String sid = request.getParameter("idp");
+            Long id = Long.valueOf(sid);
+            cart.update(id,merchandise);
+        }
+        
         response.sendRedirect("index.jsp");
     }
 
